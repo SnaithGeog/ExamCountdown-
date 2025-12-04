@@ -1,543 +1,622 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>The Snaith School – GCSE Geography Countdown 2026</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="UTF-8" />
+  <title>The Snaith School – GCSE Geography Countdown 2026</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <style>
-    :root {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: #022c22;
-      color: #e5e7eb;
-    }
-    body {
-      margin: 0;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 1.5rem;
-      box-sizing: border-box;
-      /* subtle “map” grid background */
-      background:
-        linear-gradient(135deg, rgba(45, 212, 191, 0.12), rgba(37, 99, 235, 0.08)),
-        radial-gradient(circle at top left, rgba(96, 165, 250, 0.18), transparent 60%),
-        repeating-linear-gradient(
-          0deg,
-          rgba(15, 118, 110, 0.22),
-          rgba(15, 118, 110, 0.22) 1px,
-          transparent 1px,
-          transparent 16px
-        ),
-        repeating-linear-gradient(
-          90deg,
-          rgba(15, 118, 110, 0.22),
-          rgba(15, 118, 110, 0.22) 1px,
-          #022c22 1px,
-          #022c22 16px
-        );
-      background-blend-mode: soft-light, normal, normal, normal;
-    }
-    header {
-      max-width: 960px;
-      text-align: center;
-      margin-bottom: 1.5rem;
-    }
-    h1 {
-      margin: 0 0 0.4rem;
-      font-size: clamp(1.9rem, 2.7vw + 1.2rem, 2.8rem);
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-    }
-    header p {
-      margin: 0.25rem 0;
-      font-size: 0.95rem;
-      opacity: 0.9;
-    }
-    .today-line {
-      margin-top: 0.4rem;
-      font-size: 0.9rem;
-      opacity: 0.85;
-    }
-    .cards {
-      width: 100%;
-      max-width: 960px;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.1rem;
-    }
-    .card {
-      background: rgba(15, 23, 42, 0.96);
-      border-radius: 1.2rem;
-      padding: 1.3rem 1.5rem;
-      box-shadow: 0 18px 45px rgba(15, 23, 42, 0.8);
-      border: 1px solid rgba(56, 189, 248, 0.35);
-      display: flex;
-      flex-direction: column;
-      gap: 0.45rem;
-      position: relative;
-      overflow: hidden;
-    }
-    .card::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(circle at top right, rgba(34, 197, 94, 0.15), transparent 55%);
-      pointer-events: none;
-      mix-blend-mode: screen;
-    }
-    .card-inner {
-      position: relative;
-      z-index: 1;
-    }
-    .paper-label {
-      font-size: 0.78rem;
-      text-transform: uppercase;
-      letter-spacing: 0.16em;
-      opacity: 0.8;
-      margin-bottom: 0.15rem;
-    }
-    .card h2 {
-      margin: 0;
-      font-size: 1.2rem;
-    }
-    .exam-code {
-      font-size: 0.85rem;
-      opacity: 0.8;
-    }
-    .exam-date {
-      margin-top: 0.15rem;
-      font-size: 0.92rem;
-      font-weight: 500;
-      color: #a5f3fc;
-    }
-    .countdown-main {
-      margin-top: 0.55rem;
-      font-size: 1.05rem;
-      font-weight: 600;
-    }
-    .countdown-main span {
-      font-variant-numeric: tabular-nums;
-      padding-right: 0.18rem;
-    }
-    .metrics {
-      margin-top: 0.4rem;
-      font-size: 0.85rem;
-      line-height: 1.4;
-    }
-    .metrics-row {
-      display: flex;
-      justify-content: space-between;
-      gap: 0.4rem;
-      flex-wrap: wrap;
-    }
-    .metric-label {
-      opacity: 0.7;
-      font-size: 0.8rem;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-    }
-    .metric-value {
-      font-variant-numeric: tabular-nums;
-      font-weight: 600;
-    }
-    .status {
-      margin-top: 0.6rem;
-      font-size: 0.8rem;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      opacity: 0.8;
-    }
-    footer {
-      margin-top: 1.7rem;
-      font-size: 0.8rem;
-      opacity: 0.75;
-      text-align: center;
-      max-width: 960px;
-    }
-  </style>
+  <style>
+    /* --- Global & Base Styles --- */
+    :root {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #022c22;
+      color: #e5e7eb;
+    }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 1.5rem;
+      box-sizing: border-box;
+      /* subtle “map” grid background */
+      background:
+        linear-gradient(135deg, rgba(45, 212, 191, 0.12), rgba(37, 99, 235, 0.08)),
+        radial-gradient(circle at top left, rgba(96, 165, 250, 0.18), transparent 60%),
+        repeating-linear-gradient(
+          0deg,
+          rgba(15, 118, 110, 0.22),
+          rgba(15, 118, 110, 0.22) 1px,
+          transparent 1px,
+          transparent 16px
+        ),
+        repeating-linear-gradient(
+          90deg,
+          rgba(15, 118, 110, 0.22),
+          rgba(15, 118, 110, 0.22) 1px,
+          #022c22 1px,
+          #022c22 16px
+        );
+      background-blend-mode: soft-light, normal, normal, normal;
+    }
 
-  <script>
-    // --- Dynamic manifest (single-file PWA) ---
-    (function createManifest() {
-      const manifest = {
-        name: "GCSE Geography Countdown – The Snaith School",
-        short_name: "Geog Countdown",
-        start_url: ".",
-        display: "standalone",
-        background_color: "#022c22",
-        theme_color: "#0f766e",
-        icons: []
-      };
-      const blob = new Blob([JSON.stringify(manifest)], { type: "application/json" });
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement("link");
-      link.rel = "manifest";
-      link.href = url;
-      document.head.appendChild(link);
-    })();
+    /* --- Header Styles --- */
+    header {
+      max-width: 960px;
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+    h1 {
+      margin: 0 0 0.4rem;
+      font-size: clamp(1.9rem, 2.7vw + 1.2rem, 2.8rem);
+      letter-spacing: 0.08em; /* Increased letter-spacing for impact */
+      text-transform: uppercase;
+      font-weight: 800; /* Bolder title */
+      color: #ffffff;
+    }
+    header p {
+      margin: 0.25rem 0;
+      font-size: 0.95rem;
+      opacity: 0.9;
+    }
+    .today-line {
+      margin-top: 0.4rem;
+      font-size: 0.9rem;
+      opacity: 0.85;
+      font-weight: 500;
+    }
 
-    // --- Service worker (offline) via Blob ---
-    if ("serviceWorker" in navigator) {
-      window.addEventListener("load", () => {
-        const swCode = `
-          const CACHE_NAME = "geog-countdown-v2";
-          self.addEventListener("install", event => {
-            event.waitUntil(
-              caches.open(CACHE_NAME).then(cache => cache.addAll([self.registration.scope]))
-            );
-          });
-          self.addEventListener("fetch", event => {
-            event.respondWith(
-              caches.match(event.request).then(response => response || fetch(event.request))
-            );
-          });
-        `;
-        const swBlob = new Blob([swCode], { type: "text/javascript" });
-        const swUrl = URL.createObjectURL(swBlob);
-        navigator.serviceWorker.register(swUrl).catch(console.error);
-      });
-    }
-  </script>
+    /* --- Card Grid & Layout --- */
+    .cards {
+      width: 100%;
+      max-width: 960px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.1rem;
+    }
+
+    /* --- Card Styling --- */
+    .card {
+      background: rgba(15, 23, 42, 0.96);
+      border-radius: 1.2rem;
+      padding: 1.3rem 1.5rem;
+      box-shadow: 0 18px 45px rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+      position: relative;
+      overflow: hidden;
+      /* Hover transition */
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .card:hover {
+      transform: translateY(-3px); /* Lift effect */
+      box-shadow: 0 25px 55px rgba(15, 23, 42, 0.95), 0 0 20px rgba(56, 189, 248, 0.6); /* Added glow */
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top right, rgba(34, 197, 94, 0.15), transparent 55%);
+      pointer-events: none;
+      mix-blend-mode: screen;
+    }
+    .card-inner {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* --- Card Content Styles (Enhanced) --- */
+    .paper-label {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: #38bdf8; /* Stronger accent color */
+      margin-bottom: 0.15rem;
+      font-weight: 600;
+    }
+    .card h2 {
+      margin: 0;
+      font-size: 1.3rem; /* Slightly larger heading */
+    }
+    .card h2 .emoji {
+      margin-right: 0.5rem;
+    }
+    .exam-code {
+      font-size: 0.85rem;
+      opacity: 0.8;
+    }
+    .exam-date {
+      margin-top: 0.15rem;
+      font-size: 0.92rem;
+      font-weight: 600; /* Bolder date */
+      color: #a5f3fc;
+    }
+
+    /* --- Main Countdown (The Big Numbers) --- */
+    .countdown-main {
+      margin-top: 0.55rem;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #4ade80; /* Brighter, distinct color */
+      text-shadow: 0 0 8px rgba(74, 222, 128, 0.4); /* Subtle glow */
+    }
+    .countdown-main span {
+      font-variant-numeric: tabular-nums;
+      padding-right: 0.18rem;
+      font-size: 1.8rem; /* Significantly larger */
+      font-weight: 800; /* Extra bold */
+    }
+    /* Add a slight pulse animation on update for visual feedback */
+    @keyframes pulse {
+      0% { opacity: 0.9; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.02); }
+      100% { opacity: 0.9; transform: scale(1); }
+    }
+    .countdown-main.pulsing span {
+      animation: pulse 0.3s ease-out;
+    }
+
+    /* --- Metrics --- */
+    .metrics {
+      margin-top: 0.75rem; /* More space */
+      font-size: 0.85rem;
+      line-height: 1.4;
+    }
+    .metrics-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+    }
+    .metric-label {
+      opacity: 0.7;
+      font-size: 0.75rem; /* Slightly smaller label */
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+    .metric-value {
+      font-variant-numeric: tabular-nums;
+      font-weight: 700; /* Bolder values */
+      color: #bae6fd;
+    }
+
+    /* --- Status Bar (Enhanced) --- */
+    .status {
+      margin-top: 0.6rem;
+      padding: 0.4rem 0.6rem;
+      background: rgba(5, 150, 105, 0.15); /* Subtle green background for status */
+      border-radius: 0.4rem;
+      font-size: 0.85rem;
+      font-weight: 500;
+      text-align: center;
+      opacity: 0.95;
+      color: #34d399; /* Green text for "plenty of time" */
+    }
+
+    /* Status specific styling (will be set by JS) */
+    .status.warning {
+      background: rgba(251, 191, 36, 0.15);
+      color: #fcd34d;
+    }
+    .status.critical {
+      background: rgba(239, 68, 68, 0.15);
+      color: #f87171;
+    }
+
+    /* --- Footer --- */
+    footer {
+      margin-top: 1.7rem;
+      font-size: 0.8rem;
+      opacity: 0.75;
+      text-align: center;
+      max-width: 960px;
+    }
+  </style>
+
+  <script>
+    // --- Dynamic manifest (single-file PWA) ---
+    (function createManifest() {
+      const manifest = {
+        name: "GCSE Geography Countdown – The Snaith School",
+        short_name: "Geog Countdown",
+        start_url: ".",
+        display: "standalone",
+        background_color: "#022c22",
+        theme_color: "#0f766e",
+        icons: []
+      };
+      const blob = new Blob([JSON.stringify(manifest)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("link");
+      link.rel = "manifest";
+      link.href = url;
+      document.head.appendChild(link);
+    })();
+
+    // --- Service worker (offline) via Blob ---
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        const swCode = `
+          const CACHE_NAME = "geog-countdown-v2";
+          self.addEventListener("install", event => {
+            event.waitUntil(
+              caches.open(CACHE_NAME).then(cache => cache.addAll([self.registration.scope]))
+            );
+          });
+          self.addEventListener("fetch", event => {
+            event.respondWith(
+              caches.match(event.request).then(response => response || fetch(event.request))
+            );
+          });
+        `;
+        const swBlob = new Blob([swCode], { type: "text/javascript" });
+        const swUrl = URL.createObjectURL(swBlob);
+        navigator.serviceWorker.register(swUrl).catch(console.error);
+      });
+    }
+  </script>
 </head>
 <body>
-  <header>
-    <h1>GCSE Geography Countdown 2026</h1>
-    <p>The Snaith School · Edexcel A (1GA0)</p>
-    <p class="today-line"></p>
-  </header>
+  <header>
+    <h1>GCSE Geography Countdown 2026</h1>
+    <p>The Snaith School · **Edexcel A (1GA0)**</p>
+    <p class="today-line"></p>
+  </header>
 
-  <main class="cards">
-    <!-- Paper 1 -->
-    <section class="card" data-paper-id="paper1">
-      <div class="card-inner">
-        <div class="paper-label">Paper 1</div>
-        <h2>The Physical Environment</h2>
-        <div class="exam-code">Exam code: 1GA0/01</div>
-        <div class="exam-date"></div>
+  <main class="cards">
+        <section class="card" data-paper-id="paper1">
+      <div class="card-inner">
+        <div class="paper-label">Paper 1</div>
+        <h2><span class="emoji">⛰️</span> The Physical Environment</h2>
+        <div class="exam-code">Exam code: **1GA0/01**</div>
+        <div class="exam-date"></div>
 
-        <div class="countdown-main">
-          <span class="days">–</span> days
-          <span class="hours">–</span> h
-          <span class="minutes">–</span> m
-          <span class="seconds">–</span> s
-        </div>
+        <div class="countdown-main">
+          <span class="days">–</span> days
+          <span class="hours">–</span> h
+          <span class="minutes">–</span> m
+          <span class="seconds">–</span> s
+        </div>
 
-        <div class="metrics">
-          <div class="metrics-row">
-            <div>
-              <div class="metric-label">Total days</div>
-              <div class="metric-value calendar-days">–</div>
-            </div>
-            <div>
-              <div class="metric-label">School days</div>
-              <div class="metric-value teaching-days">–</div>
-            </div>
-            <div>
-              <div class="metric-label">Geography lessons</div>
-              <div class="metric-value lessons-left">–</div>
-            </div>
-          </div>
-          <div class="metrics-row" style="margin-top:0.4rem;">
-            <div>
-              <div class="metric-label">Total minutes</div>
-              <div class="metric-value total-minutes">–</div>
-            </div>
-            <div>
-              <div class="metric-label">Total seconds</div>
-              <div class="metric-value total-seconds">–</div>
-            </div>
-          </div>
-        </div>
+        <div class="metrics">
+          <div class="metrics-row">
+            <div>
+              <div class="metric-label">Total days</div>
+              <div class="metric-value calendar-days">–</div>
+            </div>
+            <div>
+              <div class="metric-label">School days</div>
+              <div class="metric-value teaching-days">–</div>
+            </div>
+            <div>
+              <div class="metric-label">Geography lessons</div>
+              <div class="metric-value lessons-left">–</div>
+            </div>
+          </div>
+          <div class="metrics-row" style="margin-top:0.6rem;">
+            <div>
+              <div class="metric-label">Total minutes</div>
+              <div class="metric-value total-minutes">–</div>
+            </div>
+            <div>
+              <div class="metric-label">Total seconds</div>
+              <div class="metric-value total-seconds">–</div>
+            </div>
+          </div>
+        </div>
 
-        <div class="status"></div>
-      </div>
-    </section>
+        <div class="status"></div>
+      </div>
+    </section>
 
-    <!-- Paper 2 -->
-    <section class="card" data-paper-id="paper2">
-      <div class="card-inner">
-        <div class="paper-label">Paper 2</div>
-        <h2>The Human Environment</h2>
-        <div class="exam-code">Exam code: 1GA0/02</div>
-        <div class="exam-date"></div>
+        <section class="card" data-paper-id="paper2">
+      <div class="card-inner">
+        <div class="paper-label">Paper 2</div>
+        <h2><span class="emoji">🏙️</span> The Human Environment</h2>
+        <div class="exam-code">Exam code: **1GA0/02**</div>
+        <div class="exam-date"></div>
 
-        <div class="countdown-main">
-          <span class="days">–</span> days
-          <span class="hours">–</span> h
-          <span class="minutes">–</span> m
-          <span class="seconds">–</span> s
-        </div>
+        <div class="countdown-main">
+          <span class="days">–</span> days
+          <span class="hours">–</span> h
+          <span class="minutes">–</span> m
+          <span class="seconds">–</span> s
+        </div>
 
-        <div class="metrics">
-          <div class="metrics-row">
-            <div>
-              <div class="metric-label">Total days</div>
-              <div class="metric-value calendar-days">–</div>
-            </div>
-            <div>
-              <div class="metric-label">School days</div>
-              <div class="metric-value teaching-days">–</div>
-            </div>
-            <div>
-              <div class="metric-label">Geography lessons</div>
-              <div class="metric-value lessons-left">–</div>
-            </div>
-          </div>
-          <div class="metrics-row" style="margin-top:0.4rem;">
-            <div>
-              <div class="metric-label">Total minutes</div>
-              <div class="metric-value total-minutes">–</div>
-            </div>
-            <div>
-              <div class="metric-label">Total seconds</div>
-              <div class="metric-value total-seconds">–</div>
-            </div>
-          </div>
-        </div>
+        <div class="metrics">
+          <div class="metrics-row">
+            <div>
+              <div class="metric-label">Total days</div>
+              <div class="metric-value calendar-days">–</div>
+            </div>
+            <div>
+              <div class="metric-label">School days</div>
+              <div class="metric-value teaching-days">–</div>
+            </div>
+            <div>
+              <div class="metric-label">Geography lessons</div>
+              <div class="metric-value lessons-left">–</div>
+            </div>
+          </div>
+          <div class="metrics-row" style="margin-top:0.6rem;">
+            <div>
+              <div class="metric-label">Total minutes</div>
+              <div class="metric-value total-minutes">–</div>
+            </div>
+            <div>
+              <div class="metric-label">Total seconds</div>
+              <div class="metric-value total-seconds">–</div>
+            </div>
+          </div>
+        </div>
 
-        <div class="status"></div>
-      </div>
-    </section>
+        <div class="status"></div>
+      </div>
+    </section>
 
-    <!-- Paper 3 -->
-    <section class="card" data-paper-id="paper3">
-      <div class="card-inner">
-        <div class="paper-label">Paper 3</div>
-        <h2>Fieldwork &amp; UK Challenges</h2>
-        <div class="exam-code">Exam code: 1GA0/03</div>
-        <div class="exam-date"></div>
+        <section class="card" data-paper-id="paper3">
+      <div class="card-inner">
+        <div class="paper-label">Paper 3</div>
+        <h2><span class="emoji">🧭</span> Fieldwork &amp; UK Challenges</h2>
+        <div class="exam-code">Exam code: **1GA0/03**</div>
+        <div class="exam-date"></div>
 
-        <div class="countdown-main">
-          <span class="days">–</span> days
-          <span class="hours">–</span> h
-          <span class="minutes">–</span> m
-          <span class="seconds">–</span> s
-        </div>
+        <div class="countdown-main">
+          <span class="days">–</span> days
+          <span class="hours">–</span> h
+          <span class="minutes">–</span> m
+          <span class="seconds">–</span> s
+        </div>
 
-        <div class="metrics">
-          <div class="metrics-row">
-            <div>
-              <div class="metric-label">Total days</div>
-              <div class="metric-value calendar-days">–</div>
-            </div>
-            <div>
-              <div class="metric-label">School days</div>
-              <div class="metric-value teaching-days">–</div>
-            </div>
-            <div>
-              <div class="metric-label">Geography lessons</div>
-              <div class="metric-value lessons-left">–</div>
-            </div>
-          </div>
-          <div class="metrics-row" style="margin-top:0.4rem;">
-            <div>
-              <div class="metric-label">Total minutes</div>
-              <div class="metric-value total-minutes">–</div>
-            </div>
-            <div>
-              <div class="metric-label">Total seconds</div>
-              <div class="metric-value total-seconds">–</div>
-            </div>
-          </div>
-        </div>
+        <div class="metrics">
+          <div class="metrics-row">
+            <div>
+              <div class="metric-label">Total days</div>
+              <div class="metric-value calendar-days">–</div>
+            </div>
+            <div>
+              <div class="metric-label">School days</div>
+              <div class="metric-value teaching-days">–</div>
+            </div>
+            <div>
+              <div class="metric-label">Geography lessons</div>
+              <div class="metric-value lessons-left">–</div>
+            </div>
+          </div>
+          <div class="metrics-row" style="margin-top:0.6rem;">
+            <div>
+              <div class="metric-label">Total minutes</div>
+              <div class="metric-value total-minutes">–</div>
+            </div>
+            <div>
+              <div class="metric-label">Total seconds</div>
+              <div class="metric-value total-seconds">–</div>
+            </div>
+          </div>
+        </div>
 
-        <div class="status"></div>
-      </div>
-    </section>
-  </main>
+        <div class="status"></div>
+      </div>
+    </section>
+  </main>
 
-  <footer>
-    Install this as an app (Add to Home Screen) and leave it running on the board – it will update live,
-    including teaching days and geography lessons based on The Snaith School 2025–26 term dates.
-  </footer>
+  <footer>
+    Install this as an app (Add to Home Screen) and leave it running on the board – it will update live,
+    including teaching days and geography lessons based on The Snaith School 2025–26 term dates.
+  </footer>
 
-  <script>
-    // --- Exam configuration (Edexcel A, 2026) ---
-    const exams = [
-      {
-        id: "paper1",
-        name: "Paper 1 – The Physical Environment",
-        dateTime: new Date("2026-05-13T09:00:00"),
-        display: "Exam: Wednesday 13 May 2026 · 9:00am"
-      },
-      {
-        id: "paper2",
-        name: "Paper 2 – The Human Environment",
-        dateTime: new Date("2026-06-03T13:30:00"),
-        display: "Exam: Wednesday 3 June 2026 · 1:30pm"
-      },
-      {
-        id: "paper3",
-        name: "Paper 3 – Fieldwork & UK Challenges",
-        dateTime: new Date("2026-06-11T09:00:00"),
-        display: "Exam: Thursday 11 June 2026 · 9:00am"
-      }
-    ];
+  <script>
+    // --- Exam configuration (Edexcel A, 2026) ---
+    const exams = [
+      {
+        id: "paper1",
+        name: "Paper 1 – The Physical Environment",
+        dateTime: new Date("2026-05-13T09:00:00"),
+        display: "Exam: Wednesday 13 May 2026 · 9:00am"
+      },
+      {
+        id: "paper2",
+        name: "Paper 2 – The Human Environment",
+        dateTime: new Date("2026-06-03T13:30:00"),
+        display: "Exam: Wednesday 3 June 2026 · 1:30pm"
+      },
+      {
+        id: "paper3",
+        name: "Paper 3 – Fieldwork & UK Challenges",
+        dateTime: new Date("2026-06-11T09:00:00"),
+        display: "Exam: Thursday 11 June 2026 · 9:00am"
+      }
+    ];
 
-    // --- Snaith 2025–26 holiday blocks (school closed) ---
-    const holidayBlocks = [
-      { // Christmas
-        start: new Date("2025-12-22T00:00:00"),
-        end: new Date("2026-01-02T23:59:59")
-      },
-      { // February half term
-        start: new Date("2026-02-16T00:00:00"),
-        end: new Date("2026-02-20T23:59:59")
-      },
-      { // Easter + TEAL
-        start: new Date("2026-03-27T00:00:00"),
-        end: new Date("2026-04-10T23:59:59")
-      }
-    ];
+    // --- Snaith 2025–26 holiday blocks (school closed) ---
+    const holidayBlocks = [
+      { // Christmas
+        start: new Date("2025-12-22T00:00:00"),
+        end: new Date("2026-01-02T23:59:59")
+      },
+      { // February half term
+        start: new Date("2026-02-16T00:00:00"),
+        end: new Date("2026-02-20T23:59:59")
+      },
+      { // Easter + TEAL
+        start: new Date("2026-03-27T00:00:00"),
+        end: new Date("2026-04-10T23:59:59")
+      }
+    ];
 
-    function startOfDay(d) {
-      const x = new Date(d);
-      x.setHours(0, 0, 0, 0);
-      return x;
-    }
+    // --- Helper functions (Unchanged, they are robust) ---
+    function startOfDay(d) {
+      const x = new Date(d);
+      x.setHours(0, 0, 0, 0);
+      return x;
+    }
 
-    function endOfDay(d) {
-      const x = new Date(d);
-      x.setHours(23, 59, 59, 999);
-      return x;
-    }
+    function endOfDay(d) {
+      const x = new Date(d);
+      x.setHours(23, 59, 59, 999);
+      return x;
+    }
 
-    function countWeekdaysInclusive(start, end) {
-      const s = startOfDay(start);
-      const e = startOfDay(end);
-      if (e < s) return 0;
-      let count = 0;
-      const d = new Date(s);
-      while (d <= e) {
-        const day = d.getDay(); // 0 = Sun, 1 = Mon
-        if (day >= 1 && day <= 5) count++;
-        d.setDate(d.getDate() + 1);
-      }
-      return count;
-    }
+    function countWeekdaysInclusive(start, end) {
+      const s = startOfDay(start);
+      const e = startOfDay(end);
+      if (e < s) return 0;
+      let count = 0;
+      const d = new Date(s);
+      while (d <= e) {
+        const day = d.getDay(); // 0 = Sun, 1 = Mon
+        if (day >= 1 && day <= 5) count++;
+        d.setDate(d.getDate() + 1);
+      }
+      return count;
+    }
 
-    function getOverlap(startA, endA, startB, endB) {
-      const start = startA > startB ? startA : startB;
-      const end = endA < endB ? endA : endB;
-      if (end < start) return null;
-      return { start, end };
-    }
+    function getOverlap(startA, endA, startB, endB) {
+      const start = startA > startB ? startA : startB;
+      const end = endA < endB ? endA : endB;
+      if (end < start) return null;
+      return { start, end };
+    }
 
-    function getTeachingDaysLeft(now, examDate) {
-      const todayStart = startOfDay(now);
-      const examDay = startOfDay(examDate);
-      if (examDay < todayStart) return { teachingDays: 0, totalWeekdays: 0, holidayWeekdays: 0 };
+    function getTeachingDaysLeft(now, examDate) {
+      const todayStart = startOfDay(now);
+      const examDay = startOfDay(examDate);
+      if (examDay < todayStart) return { teachingDays: 0, totalWeekdays: 0, holidayWeekdays: 0 };
 
-      const totalWeekdays = countWeekdaysInclusive(todayStart, examDay);
+      const totalWeekdays = countWeekdaysInclusive(todayStart, examDay);
 
-      let holidayWeekdays = 0;
-      for (const block of holidayBlocks) {
-        const overlap = getOverlap(todayStart, examDay, startOfDay(block.start), endOfDay(block.end));
-        if (overlap) {
-          holidayWeekdays += countWeekdaysInclusive(overlap.start, overlap.end);
+      let holidayWeekdays = 0;
+      for (const block of holidayBlocks) {
+        const overlap = getOverlap(todayStart, examDay, startOfDay(block.start), endOfDay(block.end));
+        if (overlap) {
+          holidayWeekdays += countWeekdaysInclusive(overlap.start, overlap.end);
+        }
+      }
+
+      const teachingDays = Math.max(0, totalWeekdays - holidayWeekdays);
+      return { teachingDays, totalWeekdays, holidayWeekdays };
+    }
+
+    function formatTwo(n) {
+      return n.toString().padStart(2, "0");
+    }
+    
+    // --- Main Update Function (Enhanced with animation and status classes) ---
+    let previousSeconds = {}; // Track seconds for animation
+
+    function updateCountdowns() {
+      const now = new Date();
+
+      const todayLine = document.querySelector(".today-line");
+      if (todayLine) {
+        todayLine.textContent = "Today is " + now.toLocaleString("en-GB", {
+          weekday: "long",
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit" // Added seconds for live feel
+        });
+      }
+
+      exams.forEach(exam => {
+        const card = document.querySelector(`.card[data-paper-id="${exam.id}"]`);
+        if (!card) return;
+
+        const examDate = exam.dateTime;
+        const examDateEl = card.querySelector(".exam-date");
+        if (examDateEl) {
+          examDateEl.textContent = exam.display;
+        }
+
+        const diffMs = examDate - now;
+        const daysEl = card.querySelector(".days");
+        const hoursEl = card.querySelector(".hours");
+        const minutesEl = card.querySelector(".minutes");
+        const secondsEl = card.querySelector(".seconds");
+        const calDaysEl = card.querySelector(".calendar-days");
+        const teachingDaysEl = card.querySelector(".teaching-days");
+        const lessonsEl = card.querySelector(".lessons-left");
+        const totalMinutesEl = card.querySelector(".total-minutes");
+        const totalSecondsEl = card.querySelector(".total-seconds");
+        const statusEl = card.querySelector(".status");
+        const countdownMainEl = card.querySelector(".countdown-main");
+
+        if (diffMs <= 0) {
+          if (daysEl) daysEl.textContent = "0";
+          if (hoursEl) hoursEl.textContent = "00";
+          if (minutesEl) minutesEl.textContent = "00";
+          if (secondsEl) secondsEl.textContent = "00";
+          if (calDaysEl) calDaysEl.textContent = "0";
+          if (teachingDaysEl) teachingDaysEl.textContent = "0";
+          if (lessonsEl) lessonsEl.textContent = "0";
+          if (totalMinutesEl) totalMinutesEl.textContent = "0";
+          if (totalSecondsEl) totalSecondsEl.textContent = "0";
+          if (statusEl) {
+                statusEl.textContent = "✅ Exam completed!";
+                statusEl.className = "status critical";
+            }
+          return;
+        }
+
+        const totalSeconds = Math.floor(diffMs / 1000);
+        const totalMinutes = Math.floor(totalSeconds / 60);
+        const calendarDays = Math.floor(totalSeconds / 86400);
+
+        const days = calendarDays;
+        let remainder = totalSeconds - days * 86400;
+        const hours = Math.floor(remainder / 3600);
+        remainder %= 3600;
+        const mins = Math.floor(remainder / 60);
+        const secs = remainder % 60;
+
+        if (daysEl) daysEl.textContent = String(days);
+        if (hoursEl) hoursEl.textContent = formatTwo(hours);
+        if (minutesEl) minutesEl.textContent = formatTwo(mins);
+        if (secondsEl) secondsEl.textContent = formatTwo(secs);
+
+        // Animation: Pulse the seconds when they change
+        if (countdownMainEl && secondsEl) {
+            if (previousSeconds[exam.id] !== secs) {
+                countdownMainEl.classList.add('pulsing');
+                setTimeout(() => countdownMainEl.classList.remove('pulsing'), 300);
+            }
+            previousSeconds[exam.id] = secs;
         }
-      }
 
-      const teachingDays = Math.max(0, totalWeekdays - holidayWeekdays);
-      return { teachingDays, totalWeekdays, holidayWeekdays };
-    }
+        if (calDaysEl) calDaysEl.textContent = calendarDays.toString();
+        if (totalMinutesEl) totalMinutesEl.textContent = totalMinutes.toLocaleString("en-GB");
+        if (totalSecondsEl) totalSecondsEl.textContent = totalSeconds.toLocaleString("en-GB");
 
-    function formatTwo(n) {
-      return n.toString().padStart(2, "0");
-    }
+        const { teachingDays, totalWeekdays, holidayWeekdays } = getTeachingDaysLeft(now, examDate);
+        // Assuming an average of 3 lessons per week (or 6 lessons per 10 school days)
+        const lessonsLeft = Math.ceil(teachingDays / (10/6)); 
 
-    function updateCountdowns() {
-      const now = new Date();
+        if (teachingDaysEl) teachingDaysEl.textContent = teachingDays.toString();
+        if (lessonsEl) lessonsEl.textContent = lessonsLeft.toString();
 
-      const todayLine = document.querySelector(".today-line");
-      if (todayLine) {
-        todayLine.textContent = "Today is " + now.toLocaleString("en-GB", {
-          weekday: "long",
-          year: "numeric",
-          month: "long",
-          day: "numeric",
-          hour: "2-digit",
-          minute: "2-digit"
-        });
-      }
+        if (statusEl) {
+            statusEl.classList.remove('warning', 'critical');
+          if (days <= 7) {
+            statusEl.textContent = "🚨 Final push – under one week to go. Maximum effort required!";
+                statusEl.classList.add('critical');
+          } else if (days <= 30) {
+            statusEl.textContent = "⚠️ Less than a month left – targeted revision and exam practice is key.";
+                statusEl.classList.add('warning');
+          } else {
+            statusEl.textContent = "⏳ Plenty of time – build secure knowledge and case study detail.";
+          }
+        }
+      });
+    }
 
-      exams.forEach(exam => {
-        const card = document.querySelector(`.card[data-paper-id="${exam.id}"]`);
-        if (!card) return;
-
-        const examDate = exam.dateTime;
-        const examDateEl = card.querySelector(".exam-date");
-        if (examDateEl) {
-          examDateEl.textContent = exam.display;
-        }
-
-        const diffMs = examDate - now;
-        const daysEl = card.querySelector(".days");
-        const hoursEl = card.querySelector(".hours");
-        const minutesEl = card.querySelector(".minutes");
-        const secondsEl = card.querySelector(".seconds");
-        const calDaysEl = card.querySelector(".calendar-days");
-        const teachingDaysEl = card.querySelector(".teaching-days");
-        const lessonsEl = card.querySelector(".lessons-left");
-        const totalMinutesEl = card.querySelector(".total-minutes");
-        const totalSecondsEl = card.querySelector(".total-seconds");
-        const statusEl = card.querySelector(".status");
-
-        if (diffMs <= 0) {
-          if (daysEl) daysEl.textContent = "0";
-          if (hoursEl) hoursEl.textContent = "00";
-          if (minutesEl) minutesEl.textContent = "00";
-          if (secondsEl) secondsEl.textContent = "00";
-          if (calDaysEl) calDaysEl.textContent = "0";
-          if (teachingDaysEl) teachingDaysEl.textContent = "0";
-          if (lessonsEl) lessonsEl.textContent = "0";
-          if (totalMinutesEl) totalMinutesEl.textContent = "0";
-          if (totalSecondsEl) totalSecondsEl.textContent = "0";
-          if (statusEl) statusEl.textContent = "Exam in progress or completed";
-          return;
-        }
-
-        const totalSeconds = Math.floor(diffMs / 1000);
-        const totalMinutes = Math.floor(totalSeconds / 60);
-        const calendarDays = Math.floor(totalSeconds / 86400);
-
-        const days = calendarDays;
-        let remainder = totalSeconds - days * 86400;
-        const hours = Math.floor(remainder / 3600);
-        remainder %= 3600;
-        const mins = Math.floor(remainder / 60);
-        const secs = remainder % 60;
-
-        if (daysEl) daysEl.textContent = String(days);
-        if (hoursEl) hoursEl.textContent = formatTwo(hours);
-        if (minutesEl) minutesEl.textContent = formatTwo(mins);
-        if (secondsEl) secondsEl.textContent = formatTwo(secs);
-        if (calDaysEl) calDaysEl.textContent = calendarDays.toString();
-        if (totalMinutesEl) totalMinutesEl.textContent = totalMinutes.toLocaleString("en-GB");
-        if (totalSecondsEl) totalSecondsEl.textContent = totalSeconds.toLocaleString("en-GB");
-
-        const { teachingDays, totalWeekdays, holidayWeekdays } = getTeachingDaysLeft(now, examDate);
-        const lessonsLeft = Math.ceil(teachingDays / 2); // 5 lessons / 10 school days
-
-        if (teachingDaysEl) teachingDaysEl.textContent = teachingDays.toString();
-        if (lessonsEl) lessonsEl.textContent = lessonsLeft.toString();
-
-        if (statusEl) {
-          if (days <= 7) {
-            statusEl.textContent = "Final push – under one week to go.";
-          } else if (days <= 30) {
-            statusEl.textContent = "Less than a month left – exam practice every lesson.";
-          } else {
-            statusEl.textContent = "Plenty of time – build secure knowledge and case study detail.";
-          }
-        }
-      });
-    }
-
-    updateCountdowns();
-    setInterval(updateCountdowns, 1000);
-  </script>
+    updateCountdowns();
+    setInterval(updateCountdowns, 1000);
+  </script>
 </body>
 </html>
