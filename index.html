@@ -61,28 +61,6 @@
       opacity: 0.85;
     }
 
-    .view-toggle {
-      margin-bottom: 1rem;
-      font-size: 0.85rem;
-      opacity: 0.85;
-      display: flex;
-      gap: 0.5rem;
-      align-items: center;
-      justify-content: center;
-    }
-    .toggle-button {
-      border-radius: 999px;
-      border: 1px solid rgba(148, 163, 184, 0.6);
-      padding: 0.15rem 0.6rem;
-      cursor: pointer;
-      font-size: 0.8rem;
-      background: rgba(15, 23, 42, 0.9);
-    }
-    .toggle-button.active {
-      border-color: rgba(45, 212, 191, 0.9);
-      background: rgba(15, 118, 110, 0.95);
-    }
-
     .cards {
       width: 100%;
       max-width: 960px;
@@ -187,10 +165,6 @@
       opacity: 0.8;
     }
 
-    .simple-mode .metrics {
-      display: none;
-    }
-
     footer {
       margin-top: 1.7rem;
       font-size: 0.8rem;
@@ -248,14 +222,9 @@
     <h1>GCSE Geography Countdown 2026</h1>
     <p>The Snaith School · Edexcel A (1GA0)</p>
     <p class="today-line"></p>
-    <div class="view-toggle">
-      <span>View:</span>
-      <button class="toggle-button active" data-mode="simple">Simple</button>
-      <button class="toggle-button" data-mode="detailed">Detailed</button>
-    </div>
   </header>
 
-  <main class="cards simple-mode" id="cardsRoot">
+  <main class="cards">
     <!-- Paper 1 -->
     <section class="card" data-paper-id="paper1">
       <div class="card-inner">
@@ -417,7 +386,7 @@
       },
       {
         id: "paper3",
-        name: "Paper 3 – Fieldwork & UK Challenges",
+        name: "Fieldwork & UK Challenges",
         dateTime: new Date("2026-06-11T09:00:00"),
         display: "Exam: Thursday 11 June 2026 · 9:00am"
       }
@@ -591,23 +560,6 @@
         }
       });
     }
-
-    // View toggle (Simple vs Detailed)
-    const cardsRoot = document.getElementById("cardsRoot");
-    const toggleButtons = document.querySelectorAll(".toggle-button");
-    toggleButtons.forEach(btn => {
-      btn.addEventListener("click", () => {
-        const mode = btn.getAttribute("data-mode");
-        toggleButtons.forEach(b => b.classList.remove("active"));
-        btn.classList.add("active");
-
-        if (mode === "simple") {
-          cardsRoot.classList.add("simple-mode");
-        } else {
-          cardsRoot.classList.remove("simple-mode");
-        }
-      });
-    });
 
     updateCountdowns();
     setInterval(updateCountdowns, 1000);
