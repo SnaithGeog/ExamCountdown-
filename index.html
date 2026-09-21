@@ -18,6 +18,7 @@
       background: var(--scout-forest);
       color: #f5faf7;
     }
+    * { box-sizing: border-box; }
     body {
       margin: 0;
       min-height: 100vh;
@@ -25,8 +26,7 @@
       flex-direction: column;
       align-items: center;
       padding: 1.5rem;
-      box-sizing: border-box;
-      /* subtle "map" style background using the Scouts palette */
+      overflow-x: hidden;
       background:
         linear-gradient(135deg, rgba(255, 180, 229, 0.10), rgba(0, 109, 223, 0.10)),
         radial-gradient(circle at top left, rgba(255, 230, 39, 0.14), transparent 60%),
@@ -46,10 +46,19 @@
         );
       background-blend-mode: soft-light, normal, normal, normal;
     }
+
     header {
       max-width: 960px;
       text-align: center;
       margin-bottom: 1.5rem;
+      position: relative;
+    }
+    .compass {
+      display: inline-block;
+      font-size: 1.6rem;
+      animation: spinSlow 16s linear infinite;
+      margin-right: 0.3rem;
+      transform-origin: 50% 55%;
     }
     h1 {
       margin: 0 0 0.4rem;
@@ -87,8 +96,12 @@
       gap: 0.45rem;
       position: relative;
       overflow: hidden;
-      transition: transform 150ms ease, box-shadow 150ms ease, border-color 150ms ease;
+      transition: transform 150ms ease, box-shadow 150ms ease, border-color 300ms ease;
+      animation: cardIn 700ms ease both;
     }
+    .card:nth-child(2) { animation-delay: 120ms; }
+    .card:nth-child(3) { animation-delay: 240ms; }
+
     .card::before {
       content: "";
       position: absolute;
@@ -110,9 +123,77 @@
     }
     .card[data-urgency="high"] {
       border-color: var(--scout-red);
+      animation: cardIn 700ms ease both, pulseGlowRed 1.8s ease-in-out infinite;
     }
     .card[data-urgency="low"] {
       border-color: var(--scout-green);
+    }
+    .card[data-urgency="none"] {
+      border-color: var(--scout-yellow);
+      animation: cardIn 700ms ease both, pulseGlowGold 2.4s ease-in-out infinite;
+    }
+
+    /* Particle layer — drifting themed icons */
+    .particle-field {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .particle {
+      position: absolute;
+      bottom: -1.5rem;
+      font-size: 1.1rem;
+      opacity: 0.85;
+      animation: floatUp linear forwards;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.35));
+    }
+
+    /* Mascot + progress ring */
+    .mascot-ring {
+      position: absolute;
+      top: 0.9rem;
+      right: 0.9rem;
+      width: 54px;
+      height: 54px;
+      z-index: 2;
+    }
+    .mascot-ring svg { transform: rotate(-90deg); }
+    .mascot-ring .ring-track {
+      fill: none;
+      stroke: rgba(255,255,255,0.12);
+      stroke-width: 5;
+    }
+    .mascot-ring .ring-progress {
+      fill: none;
+      stroke: var(--scout-yellow);
+      stroke-width: 5;
+      stroke-linecap: round;
+      transition: stroke-dashoffset 600ms ease, stroke 400ms ease;
+    }
+    .card[data-urgency="high"] .ring-progress { stroke: var(--scout-red); }
+    .card[data-urgency="medium"] .ring-progress { stroke: var(--scout-orange); }
+    .card[data-urgency="low"] .ring-progress { stroke: var(--scout-green); }
+    .card[data-urgency="none"] .ring-progress { stroke: var(--scout-yellow); }
+    .mascot {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      animation: bounceMascot 2.4s ease-in-out infinite;
+    }
+    .ring-percent {
+      position: absolute;
+      bottom: -1.15rem;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.6rem;
+      letter-spacing: 0.06em;
+      opacity: 0.7;
+      white-space: nowrap;
     }
 
     .paper-label {
@@ -126,6 +207,7 @@
     .card h2 {
       margin: 0;
       font-size: 1.2rem;
+      max-width: 75%;
     }
     .exam-code {
       font-size: 0.85rem;
@@ -145,6 +227,10 @@
     .countdown-main span {
       font-variant-numeric: tabular-nums;
       padding-right: 0.18rem;
+      display: inline-block;
+    }
+    .countdown-main .days.bump {
+      animation: bumpNumber 420ms ease;
     }
 
     .metrics {
@@ -184,6 +270,79 @@
       text-align: center;
       max-width: 960px;
     }
+
+    /* Milestone toast */
+    .toast {
+      position: fixed;
+      top: 1.2rem;
+      left: 50%;
+      transform: translateX(-50%) translateY(-20px);
+      background: var(--scout-yellow);
+      color: var(--scout-forest);
+      font-weight: 700;
+      padding: 0.7rem 1.3rem;
+      border-radius: 999px;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.4);
+      opacity: 0;
+      z-index: 50;
+      animation: toastIn 400ms ease forwards, toastOut 400ms ease 3.1s forwards;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+
+    /* Confetti */
+    .confetti-piece {
+      position: fixed;
+      top: -2vh;
+      width: 9px;
+      height: 14px;
+      z-index: 40;
+      pointer-events: none;
+      animation: confettiFall linear forwards;
+      border-radius: 2px;
+    }
+
+    @keyframes cardIn {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes spinSlow {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    @keyframes bounceMascot {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-3px); }
+    }
+    @keyframes bumpNumber {
+      0% { transform: scale(1); }
+      35% { transform: scale(1.28); }
+      100% { transform: scale(1); }
+    }
+    @keyframes floatUp {
+      from { transform: translateY(0) rotate(0deg); opacity: 0.9; }
+      to { transform: translateY(-260px) rotate(25deg); opacity: 0; }
+    }
+    @keyframes pulseGlowRed {
+      0%, 100% { box-shadow: 0 18px 45px rgba(2,15,9,0.8), 0 0 0 rgba(237,63,35,0); }
+      50% { box-shadow: 0 18px 45px rgba(2,15,9,0.8), 0 0 26px rgba(237,63,35,0.55); }
+    }
+    @keyframes pulseGlowGold {
+      0%, 100% { box-shadow: 0 18px 45px rgba(2,15,9,0.8), 0 0 0 rgba(255,230,39,0); }
+      50% { box-shadow: 0 18px 45px rgba(2,15,9,0.8), 0 0 30px rgba(255,230,39,0.6); }
+    }
+    @keyframes toastIn {
+      from { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+      to { opacity: 1; transform: translateX(-50%) translateY(0); }
+    }
+    @keyframes toastOut {
+      from { opacity: 1; }
+      to { opacity: 0; transform: translateX(-50%) translateY(-14px); }
+    }
+    @keyframes confettiFall {
+      from { transform: translateY(-10vh) rotate(0deg); opacity: 1; }
+      to { transform: translateY(108vh) rotate(560deg); opacity: 0.85; }
+    }
   </style>
 
   <script>
@@ -210,7 +369,7 @@
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", () => {
         const swCode = `
-          const CACHE_NAME = "geog-countdown-v4";
+          const CACHE_NAME = "geog-countdown-v5";
           self.addEventListener("install", event => {
             event.waitUntil(
               caches.open(CACHE_NAME).then(cache => cache.addAll([self.registration.scope]))
@@ -231,14 +390,23 @@
 </head>
 <body>
   <header>
-    <h1>GCSE Geography Countdown 2027</h1>
+    <h1><span class="compass">🧭</span>GCSE Geography Countdown 2027</h1>
     <p>The Snaith School · Edexcel A (1GA0) · 2026/27</p>
     <p class="today-line"></p>
   </header>
 
   <main class="cards">
     <!-- Paper 1 -->
-    <section class="card" data-paper-id="paper1">
+    <section class="card" data-paper-id="paper1" data-particles="💧,🌧️,⛰️,🌊">
+      <div class="particle-field"></div>
+      <div class="mascot-ring">
+        <svg width="54" height="54" viewBox="0 0 54 54">
+          <circle class="ring-track" cx="27" cy="27" r="23"></circle>
+          <circle class="ring-progress" cx="27" cy="27" r="23" stroke-dasharray="144.5" stroke-dashoffset="144.5"></circle>
+        </svg>
+        <div class="mascot">😌</div>
+        <div class="ring-percent"></div>
+      </div>
       <div class="card-inner">
         <div class="paper-label">Paper 1</div>
         <h2>The Physical Environment</h2>
@@ -284,7 +452,16 @@
     </section>
 
     <!-- Paper 2 -->
-    <section class="card" data-paper-id="paper2">
+    <section class="card" data-paper-id="paper2" data-particles="🏙️,🚗,🏭,🌆">
+      <div class="particle-field"></div>
+      <div class="mascot-ring">
+        <svg width="54" height="54" viewBox="0 0 54 54">
+          <circle class="ring-track" cx="27" cy="27" r="23"></circle>
+          <circle class="ring-progress" cx="27" cy="27" r="23" stroke-dasharray="144.5" stroke-dashoffset="144.5"></circle>
+        </svg>
+        <div class="mascot">😌</div>
+        <div class="ring-percent"></div>
+      </div>
       <div class="card-inner">
         <div class="paper-label">Paper 2</div>
         <h2>The Human Environment</h2>
@@ -330,7 +507,16 @@
     </section>
 
     <!-- Paper 3 -->
-    <section class="card" data-paper-id="paper3">
+    <section class="card" data-paper-id="paper3" data-particles="🧭,🗺️,🌾,🏕️">
+      <div class="particle-field"></div>
+      <div class="mascot-ring">
+        <svg width="54" height="54" viewBox="0 0 54 54">
+          <circle class="ring-track" cx="27" cy="27" r="23"></circle>
+          <circle class="ring-progress" cx="27" cy="27" r="23" stroke-dasharray="144.5" stroke-dashoffset="144.5"></circle>
+        </svg>
+        <div class="mascot">😌</div>
+        <div class="ring-percent"></div>
+      </div>
       <div class="card-inner">
         <div class="paper-label">Paper 3</div>
         <h2>Fieldwork &amp; UK Challenges</h2>
@@ -382,6 +568,8 @@
     2026–27 term dates.
   </footer>
 
+  <div id="confetti-layer"></div>
+
   <script>
     // --- Exam configuration (Edexcel A, Summer 2027 series) ---
     // Source: Pearson Edexcel GCSE Summer 2027 Examination Timetable (FINAL)
@@ -405,6 +593,15 @@
         display: "Exam: Thursday 10 June 2027 · 1:30pm"
       }
     ];
+
+    // Reference point the progress rings measure from — start of the 2026/27 school year.
+    const courseStart = new Date("2026-09-07T00:00:00");
+
+    // Day-count milestones that trigger a confetti + toast celebration, per paper.
+    const milestoneDays = [150, 100, 50, 30, 20, 14, 10, 7, 5, 3, 2, 1];
+    const milestonesFired = { paper1: new Set(), paper2: new Set(), paper3: new Set() };
+    const finishedFired = { paper1: false, paper2: false, paper3: false };
+    const lastDaysShown = { paper1: null, paper2: null, paper3: null };
 
     // --- Snaith / East Riding of Yorkshire 2026–27 holiday blocks (school closed) ---
     const holidayBlocks = [
@@ -488,6 +685,71 @@
       return n.toString().padStart(2, "0");
     }
 
+    // --- Fun stuff: mascot, particles, confetti, toasts ---
+
+    function mascotFor(urgency) {
+      if (urgency === "none") return "🎉";
+      if (urgency === "high") return "😬";
+      if (urgency === "medium") return "🙂";
+      return "😌";
+    }
+
+    function spawnParticle(card) {
+      const field = card.querySelector(".particle-field");
+      if (!field) return;
+      const set = (card.dataset.particles || "✨").split(",");
+      const icon = set[Math.floor(Math.random() * set.length)];
+      const span = document.createElement("span");
+      span.className = "particle";
+      span.textContent = icon;
+      span.style.left = Math.random() * 88 + "%";
+      const duration = 5 + Math.random() * 3;
+      span.style.animationDuration = duration + "s";
+      field.appendChild(span);
+      setTimeout(() => span.remove(), duration * 1000 + 200);
+    }
+
+    function launchConfettiBurst(count) {
+      const colors = ["#ffb4e5", "#ffe627", "#ed3f23", "#006ddf", "#ff912a", "#25b755"];
+      const layer = document.getElementById("confetti-layer");
+      for (let i = 0; i < count; i++) {
+        const piece = document.createElement("div");
+        piece.className = "confetti-piece";
+        piece.style.left = Math.random() * 100 + "vw";
+        piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+        const duration = 2.6 + Math.random() * 1.8;
+        piece.style.animationDuration = duration + "s";
+        piece.style.animationDelay = (Math.random() * 0.6) + "s";
+        layer.appendChild(piece);
+        setTimeout(() => piece.remove(), (duration + 1) * 1000);
+      }
+    }
+
+    function showToast(message) {
+      const toast = document.createElement("div");
+      toast.className = "toast";
+      toast.textContent = message;
+      document.body.appendChild(toast);
+      setTimeout(() => toast.remove(), 3600);
+    }
+
+    function celebrateMilestone(examName, days) {
+      launchConfettiBurst(46);
+      showToast("🎉 " + days + (days === 1 ? " day" : " days") + " to go — " + examName);
+    }
+
+    function celebrateFinished(examName) {
+      launchConfettiBurst(90);
+      showToast("🎉 Good luck — " + examName + " is here!");
+    }
+
+    // --- Particle loop, independent of the per-second countdown tick ---
+    setInterval(() => {
+      document.querySelectorAll(".card").forEach(card => {
+        if (Math.random() < 0.7) spawnParticle(card);
+      });
+    }, 1800);
+
     function updateCountdowns() {
       const now = new Date();
 
@@ -513,6 +775,11 @@
           examDateEl.textContent = exam.display;
         }
 
+        const ringProgress = card.querySelector(".ring-progress");
+        const ringPercent = card.querySelector(".ring-percent");
+        const mascotEl = card.querySelector(".mascot");
+        const circumference = 2 * Math.PI * 23; // r=23
+
         const diffMs = examDate - now;
         const daysEl = card.querySelector(".days");
         const hoursEl = card.querySelector(".hours");
@@ -537,6 +804,13 @@
           if (totalSecondsEl) totalSecondsEl.textContent = "0";
           if (statusEl) statusEl.textContent = "Exam in progress or completed";
           card.setAttribute("data-urgency", "none");
+          if (mascotEl) mascotEl.textContent = mascotFor("none");
+          if (ringProgress) ringProgress.style.strokeDashoffset = "0";
+          if (ringPercent) ringPercent.textContent = "100%";
+          if (!finishedFired[exam.id]) {
+            finishedFired[exam.id] = true;
+            celebrateFinished(exam.name);
+          }
           return;
         }
 
@@ -551,7 +825,15 @@
         const mins = Math.floor(remainder / 60);
         const secs = remainder % 60;
 
-        if (daysEl) daysEl.textContent = String(days);
+        if (daysEl) {
+          if (lastDaysShown[exam.id] !== null && lastDaysShown[exam.id] !== days) {
+            daysEl.classList.remove("bump");
+            void daysEl.offsetWidth; // restart animation
+            daysEl.classList.add("bump");
+          }
+          lastDaysShown[exam.id] = days;
+          daysEl.textContent = String(days);
+        }
         if (hoursEl) hoursEl.textContent = formatTwo(hours);
         if (minutesEl) minutesEl.textContent = formatTwo(mins);
         if (secondsEl) secondsEl.textContent = formatTwo(secs);
@@ -565,11 +847,22 @@
         if (teachingDaysEl) teachingDaysEl.textContent = teachingDays.toString();
         if (lessonsEl) lessonsEl.textContent = lessonsLeft.toString();
 
+        // Progress ring: how far through the course window we are
+        const totalWindow = examDate - courseStart;
+        const elapsed = now - courseStart;
+        const progress = Math.min(1, Math.max(0, elapsed / totalWindow));
+        if (ringProgress) {
+          ringProgress.setAttribute("stroke-dasharray", circumference.toFixed(1));
+          ringProgress.style.strokeDashoffset = (circumference * (1 - progress)).toFixed(1);
+        }
+        if (ringPercent) ringPercent.textContent = Math.round(progress * 100) + "%";
+
         // Urgency colouring
         let urgency = "low";
         if (days <= 7) urgency = "high";
         else if (days <= 30) urgency = "medium";
         card.setAttribute("data-urgency", urgency);
+        if (mascotEl) mascotEl.textContent = mascotFor(urgency);
 
         if (statusEl) {
           if (days <= 7) {
@@ -579,6 +872,12 @@
           } else {
             statusEl.textContent = "Plenty of time – build secure knowledge and case study detail.";
           }
+        }
+
+        // Milestone celebration
+        if (milestoneDays.includes(days) && !milestonesFired[exam.id].has(days)) {
+          milestonesFired[exam.id].add(days);
+          celebrateMilestone(exam.name, days);
         }
       });
     }
