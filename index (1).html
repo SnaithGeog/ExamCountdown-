@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>The Snaith School – GCSE Geography Countdown 2027</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <style>
+    :root {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --scout-pink: #ffb4e5;
+      --scout-yellow: #ffe627;
+      --scout-forest: #205b41;
+      --scout-red: #ed3f23;
+      --scout-blue: #006ddf;
+      --scout-orange: #ff912a;
+      --scout-green: #25b755;
+      background: var(--scout-forest);
+      color: #f5faf7;
+    }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 1.5rem;
+      box-sizing: border-box;
+      /* subtle "map" style background using the Scouts palette */
+      background:
+        linear-gradient(135deg, rgba(255, 180, 229, 0.10), rgba(0, 109, 223, 0.10)),
+        radial-gradient(circle at top left, rgba(255, 230, 39, 0.14), transparent 60%),
+        repeating-linear-gradient(
+          0deg,
+          rgba(37, 183, 85, 0.18),
+          rgba(37, 183, 85, 0.18) 1px,
+          transparent 1px,
+          transparent 16px
+        ),
+        repeating-linear-gradient(
+          90deg,
+          rgba(37, 183, 85, 0.18),
+          rgba(37, 183, 85, 0.18) 1px,
+          var(--scout-forest) 1px,
+          var(--scout-forest) 16px
+        );
+      background-blend-mode: soft-light, normal, normal, normal;
+    }
+    header {
+      max-width: 960px;
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+    h1 {
+      margin: 0 0 0.4rem;
+      font-size: clamp(1.9rem, 2.7vw + 1.2rem, 2.8rem);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--scout-yellow);
+    }
+    header p {
+      margin: 0.25rem 0;
+      font-size: 0.95rem;
+      opacity: 0.9;
+    }
+    .today-line {
+      margin-top: 0.4rem;
+      font-size: 0.9rem;
+      opacity: 0.85;
+    }
+
+    .cards {
+      width: 100%;
+      max-width: 960px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.1rem;
+    }
+    .card {
+      background: rgba(10, 30, 21, 0.96);
+      border-radius: 1.2rem;
+      padding: 1.3rem 1.5rem;
+      box-shadow: 0 18px 45px rgba(2, 15, 9, 0.8);
+      border: 1px solid rgba(0, 109, 223, 0.45);
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+      position: relative;
+      overflow: hidden;
+      transition: transform 150ms ease, box-shadow 150ms ease, border-color 150ms ease;
+    }
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top right, rgba(255, 180, 229, 0.18), transparent 55%);
+      pointer-events: none;
+      mix-blend-mode: screen;
+    }
+    .card-inner {
+      position: relative;
+      z-index: 1;
+    }
+    .card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 24px 55px rgba(2, 15, 9, 0.9);
+    }
+    .card[data-urgency="medium"] {
+      border-color: var(--scout-orange);
+    }
+    .card[data-urgency="high"] {
+      border-color: var(--scout-red);
+    }
+    .card[data-urgency="low"] {
+      border-color: var(--scout-green);
+    }
+
+    .paper-label {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      opacity: 0.8;
+      margin-bottom: 0.15rem;
+      color: var(--scout-pink);
+    }
+    .card h2 {
+      margin: 0;
+      font-size: 1.2rem;
+    }
+    .exam-code {
+      font-size: 0.85rem;
+      opacity: 0.8;
+    }
+    .exam-date {
+      margin-top: 0.15rem;
+      font-size: 0.92rem;
+      font-weight: 500;
+      color: var(--scout-yellow);
+    }
+    .countdown-main {
+      margin-top: 0.55rem;
+      font-size: 1.05rem;
+      font-weight: 600;
+    }
+    .countdown-main span {
+      font-variant-numeric: tabular-nums;
+      padding-right: 0.18rem;
+    }
+
+    .metrics {
+      margin-top: 0.4rem;
+      font-size: 0.85rem;
+      line-height: 1.4;
+    }
+    .metrics-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+    }
+    .metric-label {
+      opacity: 0.7;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+    .metric-value {
+      font-variant-numeric: tabular-nums;
+      font-weight: 600;
+    }
+
+    .status {
+      margin-top: 0.6rem;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      opacity: 0.8;
+    }
+
+    footer {
+      margin-top: 1.7rem;
+      font-size: 0.8rem;
+      opacity: 0.75;
+      text-align: center;
+      max-width: 960px;
+    }
+  </style>
+
+  <script>
+    // --- Dynamic manifest (single-file PWA) ---
+    (function createManifest() {
+      const manifest = {
+        name: "GCSE Geography Countdown – The Snaith School",
+        short_name: "Geog Countdown",
+        start_url: ".",
+        display: "standalone",
+        background_color: "#205b41",
+        theme_color: "#205b41",
+        icons: []
+      };
+      const blob = new Blob([JSON.stringify(manifest)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("link");
+      link.rel = "manifest";
+      link.href = url;
+      document.head.appendChild(link);
+    })();
+
+    // --- Service worker (offline) via Blob ---
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        const swCode = `
+          const CACHE_NAME = "geog-countdown-v4";
+          self.addEventListener("install", event => {
+            event.waitUntil(
+              caches.open(CACHE_NAME).then(cache => cache.addAll([self.registration.scope]))
+            );
+          });
+          self.addEventListener("fetch", event => {
+            event.respondWith(
+              caches.match(event.request).then(response => response || fetch(event.request))
+            );
+          });
+        `;
+        const swBlob = new Blob([swCode], { type: "text/javascript" });
+        const swUrl = URL.createObjectURL(swBlob);
+        navigator.serviceWorker.register(swUrl).catch(console.error);
+      });
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>GCSE Geography Countdown 2027</h1>
+    <p>The Snaith School · Edexcel A (1GA0) · 2026/27</p>
+    <p class="today-line"></p>
+  </header>
+
+  <main class="cards">
+    <!-- Paper 1 -->
+    <section class="card" data-paper-id="paper1">
+      <div class="card-inner">
+        <div class="paper-label">Paper 1</div>
+        <h2>The Physical Environment</h2>
+        <div class="exam-code">Exam code: 1GA0/01</div>
+        <div class="exam-date"></div>
+
+        <div class="countdown-main">
+          <span class="days">–</span> days
+          <span class="hours">–</span> h
+          <span class="minutes">–</span> m
+          <span class="seconds">–</span> s
+        </div>
+
+        <div class="metrics">
+          <div class="metrics-row">
+            <div>
+              <div class="metric-label">Total days</div>
+              <div class="metric-value calendar-days">–</div>
+            </div>
+            <div>
+              <div class="metric-label">School days</div>
+              <div class="metric-value teaching-days">–</div>
+            </div>
+            <div>
+              <div class="metric-label">Geography lessons</div>
+              <div class="metric-value lessons-left">–</div>
+            </div>
+          </div>
+          <div class="metrics-row" style="margin-top:0.4rem;">
+            <div>
+              <div class="metric-label">Total minutes</div>
+              <div class="metric-value total-minutes">–</div>
+            </div>
+            <div>
+              <div class="metric-label">Total seconds</div>
+              <div class="metric-value total-seconds">–</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="status"></div>
+      </div>
+    </section>
+
+    <!-- Paper 2 -->
+    <section class="card" data-paper-id="paper2">
+      <div class="card-inner">
+        <div class="paper-label">Paper 2</div>
+        <h2>The Human Environment</h2>
+        <div class="exam-code">Exam code: 1GA0/02</div>
+        <div class="exam-date"></div>
+
+        <div class="countdown-main">
+          <span class="days">–</span> days
+          <span class="hours">–</span> h
+          <span class="minutes">–</span> m
+          <span class="seconds">–</span> s
+        </div>
+
+        <div class="metrics">
+          <div class="metrics-row">
+            <div>
+              <div class="metric-label">Total days</div>
+              <div class="metric-value calendar-days">–</div>
+            </div>
+            <div>
+              <div class="metric-label">School days</div>
+              <div class="metric-value teaching-days">–</div>
+            </div>
+            <div>
+              <div class="metric-label">Geography lessons</div>
+              <div class="metric-value lessons-left">–</div>
+            </div>
+          </div>
+          <div class="metrics-row" style="margin-top:0.4rem;">
+            <div>
+              <div class="metric-label">Total minutes</div>
+              <div class="metric-value total-minutes">–</div>
+            </div>
+            <div>
+              <div class="metric-label">Total seconds</div>
+              <div class="metric-value total-seconds">–</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="status"></div>
+      </div>
+    </section>
+
+    <!-- Paper 3 -->
+    <section class="card" data-paper-id="paper3">
+      <div class="card-inner">
+        <div class="paper-label">Paper 3</div>
+        <h2>Fieldwork &amp; UK Challenges</h2>
+        <div class="exam-code">Exam code: 1GA0/03</div>
+        <div class="exam-date"></div>
+
+        <div class="countdown-main">
+          <span class="days">–</span> days
+          <span class="hours">–</span> h
+          <span class="minutes">–</span> m
+          <span class="seconds">–</span> s
+        </div>
+
+        <div class="metrics">
+          <div class="metrics-row">
+            <div>
+              <div class="metric-label">Total days</div>
+              <div class="metric-value calendar-days">–</div>
+            </div>
+            <div>
+              <div class="metric-label">School days</div>
+              <div class="metric-value teaching-days">–</div>
+            </div>
+            <div>
+              <div class="metric-label">Geography lessons</div>
+              <div class="metric-value lessons-left">–</div>
+            </div>
+          </div>
+          <div class="metrics-row" style="margin-top:0.4rem;">
+            <div>
+              <div class="metric-label">Total minutes</div>
+              <div class="metric-value total-minutes">–</div>
+            </div>
+            <div>
+              <div class="metric-label">Total seconds</div>
+              <div class="metric-value total-seconds">–</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="status"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    Install this as an app (Add to Home Screen) or leave it running on the board – it will update live,
+    including teaching days and geography lessons based on The Snaith School / East Riding of Yorkshire
+    2026–27 term dates.
+  </footer>
+
+  <script>
+    // --- Exam configuration (Edexcel A, Summer 2027 series) ---
+    // Source: Pearson Edexcel GCSE Summer 2027 Examination Timetable (FINAL)
+    const exams = [
+      {
+        id: "paper1",
+        name: "Paper 1 – The Physical Environment",
+        dateTime: new Date("2027-05-18T09:00:00"),
+        display: "Exam: Tuesday 18 May 2027 · 9:00am"
+      },
+      {
+        id: "paper2",
+        name: "Paper 2 – The Human Environment",
+        dateTime: new Date("2027-05-26T13:30:00"),
+        display: "Exam: Wednesday 26 May 2027 · 1:30pm"
+      },
+      {
+        id: "paper3",
+        name: "Fieldwork & UK Challenges",
+        dateTime: new Date("2027-06-10T13:30:00"),
+        display: "Exam: Thursday 10 June 2027 · 1:30pm"
+      }
+    ];
+
+    // --- Snaith / East Riding of Yorkshire 2026–27 holiday blocks (school closed) ---
+    const holidayBlocks = [
+      { // Autumn half term
+        start: new Date("2026-10-26T00:00:00"),
+        end: new Date("2026-10-30T23:59:59")
+      },
+      { // Christmas
+        start: new Date("2026-12-21T00:00:00"),
+        end: new Date("2027-01-01T23:59:59")
+      },
+      { // Spring half term
+        start: new Date("2027-02-15T00:00:00"),
+        end: new Date("2027-02-19T23:59:59")
+      },
+      { // Easter
+        start: new Date("2027-03-22T00:00:00"),
+        end: new Date("2027-04-04T23:59:59")
+      },
+      { // Summer half term
+        start: new Date("2027-05-31T00:00:00"),
+        end: new Date("2027-06-04T23:59:59")
+      }
+    ];
+
+    function startOfDay(d) {
+      const x = new Date(d);
+      x.setHours(0, 0, 0, 0);
+      return x;
+    }
+
+    function endOfDay(d) {
+      const x = new Date(d);
+      x.setHours(23, 59, 59, 999);
+      return x;
+    }
+
+    function countWeekdaysInclusive(start, end) {
+      const s = startOfDay(start);
+      const e = startOfDay(end);
+      if (e < s) return 0;
+      let count = 0;
+      const d = new Date(s);
+      while (d <= e) {
+        const day = d.getDay(); // 0 = Sun, 1 = Mon
+        if (day >= 1 && day <= 5) count++;
+        d.setDate(d.getDate() + 1);
+      }
+      return count;
+    }
+
+    function getOverlap(startA, endA, startB, endB) {
+      const start = startA > startB ? startA : startB;
+      const end = endA < endB ? endA : endB;
+      if (end < start) return null;
+      return { start, end };
+    }
+
+    function getTeachingDaysLeft(now, examDate) {
+      const todayStart = startOfDay(now);
+      const examDay = startOfDay(examDate);
+      if (examDay < todayStart) {
+        return { teachingDays: 0, totalWeekdays: 0, holidayWeekdays: 0 };
+      }
+
+      const totalWeekdays = countWeekdaysInclusive(todayStart, examDay);
+
+      let holidayWeekdays = 0;
+      for (const block of holidayBlocks) {
+        const overlap = getOverlap(todayStart, examDay, startOfDay(block.start), endOfDay(block.end));
+        if (overlap) {
+          holidayWeekdays += countWeekdaysInclusive(overlap.start, overlap.end);
+        }
+      }
+
+      const teachingDays = Math.max(0, totalWeekdays - holidayWeekdays);
+      return { teachingDays, totalWeekdays, holidayWeekdays };
+    }
+
+    function formatTwo(n) {
+      return n.toString().padStart(2, "0");
+    }
+
+    function updateCountdowns() {
+      const now = new Date();
+
+      const todayLine = document.querySelector(".today-line");
+      if (todayLine) {
+        todayLine.textContent = "Today is " + now.toLocaleString("en-GB", {
+          weekday: "long",
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+          hour: "2-digit",
+          minute: "2-digit"
+        });
+      }
+
+      exams.forEach(exam => {
+        const card = document.querySelector(`.card[data-paper-id="${exam.id}"]`);
+        if (!card) return;
+
+        const examDate = exam.dateTime;
+        const examDateEl = card.querySelector(".exam-date");
+        if (examDateEl) {
+          examDateEl.textContent = exam.display;
+        }
+
+        const diffMs = examDate - now;
+        const daysEl = card.querySelector(".days");
+        const hoursEl = card.querySelector(".hours");
+        const minutesEl = card.querySelector(".minutes");
+        const secondsEl = card.querySelector(".seconds");
+        const calDaysEl = card.querySelector(".calendar-days");
+        const teachingDaysEl = card.querySelector(".teaching-days");
+        const lessonsEl = card.querySelector(".lessons-left");
+        const totalMinutesEl = card.querySelector(".total-minutes");
+        const totalSecondsEl = card.querySelector(".total-seconds");
+        const statusEl = card.querySelector(".status");
+
+        if (diffMs <= 0) {
+          if (daysEl) daysEl.textContent = "0";
+          if (hoursEl) hoursEl.textContent = "00";
+          if (minutesEl) minutesEl.textContent = "00";
+          if (secondsEl) secondsEl.textContent = "00";
+          if (calDaysEl) calDaysEl.textContent = "0";
+          if (teachingDaysEl) teachingDaysEl.textContent = "0";
+          if (lessonsEl) lessonsEl.textContent = "0";
+          if (totalMinutesEl) totalMinutesEl.textContent = "0";
+          if (totalSecondsEl) totalSecondsEl.textContent = "0";
+          if (statusEl) statusEl.textContent = "Exam in progress or completed";
+          card.setAttribute("data-urgency", "none");
+          return;
+        }
+
+        const totalSeconds = Math.floor(diffMs / 1000);
+        const totalMinutes = Math.floor(totalSeconds / 60);
+        const calendarDays = Math.floor(totalSeconds / 86400);
+
+        const days = calendarDays;
+        let remainder = totalSeconds - days * 86400;
+        const hours = Math.floor(remainder / 3600);
+        remainder %= 3600;
+        const mins = Math.floor(remainder / 60);
+        const secs = remainder % 60;
+
+        if (daysEl) daysEl.textContent = String(days);
+        if (hoursEl) hoursEl.textContent = formatTwo(hours);
+        if (minutesEl) minutesEl.textContent = formatTwo(mins);
+        if (secondsEl) secondsEl.textContent = formatTwo(secs);
+        if (calDaysEl) calDaysEl.textContent = calendarDays.toString();
+        if (totalMinutesEl) totalMinutesEl.textContent = totalMinutes.toLocaleString("en-GB");
+        if (totalSecondsEl) totalSecondsEl.textContent = totalSeconds.toLocaleString("en-GB");
+
+        const { teachingDays, totalWeekdays } = getTeachingDaysLeft(now, examDate);
+        const lessonsLeft = Math.ceil(teachingDays / 2); // 5 lessons / 10 school days
+
+        if (teachingDaysEl) teachingDaysEl.textContent = teachingDays.toString();
+        if (lessonsEl) lessonsEl.textContent = lessonsLeft.toString();
+
+        // Urgency colouring
+        let urgency = "low";
+        if (days <= 7) urgency = "high";
+        else if (days <= 30) urgency = "medium";
+        card.setAttribute("data-urgency", urgency);
+
+        if (statusEl) {
+          if (days <= 7) {
+            statusEl.textContent = "Final push – under one week to go.";
+          } else if (days <= 30) {
+            statusEl.textContent = "Less than a month left – exam practice every lesson.";
+          } else {
+            statusEl.textContent = "Plenty of time – build secure knowledge and case study detail.";
+          }
+        }
+      });
+    }
+
+    updateCountdowns();
+    setInterval(updateCountdowns, 1000);
+  </script>
+</body>
+</html>
